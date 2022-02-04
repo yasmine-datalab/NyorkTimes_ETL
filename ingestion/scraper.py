@@ -81,4 +81,4 @@ def get_articles(keyword):
     print("Operation OK")
 
 
-#get_articles(get_args().keyword)
+get_articles(get_args().keyword)
