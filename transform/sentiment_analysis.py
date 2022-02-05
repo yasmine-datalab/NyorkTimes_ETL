@@ -2,28 +2,28 @@
 import spacy
 from spacytextblob.spacytextblob import SpacyTextBlob
 
-# modèle
 
 class SentimentModel:
-    """
-        
-    
-    """
+    """ """
     @classmethod
-    def get_sentiment(cls,text):
-        """ Fonction retournant le score et caractère du texte"""
+    def get_sentiment(cls, text: str):
+        """
+            get sentiment about a text
+        Args:
+            text([string]): text to analyse
+        Returns:
+            sentiment ([string]) : positif or negatif
+        """
         nlp = spacy.load('en_core_web_sm')
-        
-        #spacy_text_blob = SpacyTextBlob()
-        
         nlp.add_pipe("spacytextblob")
         doc = nlp(text)
-        # scores du modèle
+        # model performance
         polarity = doc._.polarity
         subjectivity = doc._.subjectivity
         assessments = doc._.assessments
+        # decision
         if polarity > 0:
-            message = "positif"
+            sentiment = "positif"
         else:
-            message = "negatif"
-        return message
+            sentiment = "negatif"
+        return sentiment

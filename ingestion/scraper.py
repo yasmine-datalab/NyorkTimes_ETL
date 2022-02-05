@@ -18,10 +18,10 @@ def get_args():
         args([list]) : list of args
     """
     parser = argparse.ArgumentParser()
-    parser.add_argument("-k", "--keyword", help="Enter your keyword", type=str, required=True)
+    parser.add_argument("-k", "--keyword", help="Enter your keyword",
+                        type=str, required=True)
     args = parser.parse_args()
     return args
-
 
 
 def get_credentials():
@@ -44,7 +44,7 @@ def get_credentials():
     return [API_KEY, BASE_URL, API_PATH, DATALAKE]
 
 
-def get_articles(keyword):
+def get_articles(keyword: str):
     """
         Get 100 last articles about the keyword
         save into the datalake
@@ -73,16 +73,17 @@ def get_articles(keyword):
         id = article["_id"].split('/')[-1]. replace("-", "")
         pub_date = datetime.\
             strptime(article["pub_date"], "%Y-%m-%dT%H:%M:%S+0000")
-        folder_path = os.path.join(DATALAKE+"year={}/month={}/day={}".
-            format(pub_date.year, pub_date.month, pub_date.day))
+        folder_path = os.path.join(DATALAKE+"year={}/month={}/day={}".format(pub_date.year, pub_date.month, pub_date.day))
         os.makedirs(folder_path, exist_ok=True)
         file = folder_path + "/" + id + ".json"
         with open(file, 'w') as f:
             json.dump(article, f)
     print("Operation OK")
 
+
 def main():
     get_articles(get_args().keyword)
+
 
 if __name__ == '__main__':
     main()
