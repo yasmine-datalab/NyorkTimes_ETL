@@ -15,7 +15,7 @@ def get_args():
     Args:
         None
     Returns:
-        list([str]) : list of args
+        args([list]) : list of args
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("-k", "--keyword", help="Enter your keyword", type=str, required=True)
@@ -47,10 +47,11 @@ def get_credentials():
 def get_articles(keyword):
     """
         Get 100 last articles about the keyword
+        save into the datalake
     Args:
         keyword([string]): Keyword for the search
     Returns:
-        list: list of articles
+        None
     """
 
     # constantes
@@ -80,5 +81,8 @@ def get_articles(keyword):
             json.dump(article, f)
     print("Operation OK")
 
+def main():
+    get_articles(get_args().keyword)
 
-get_articles(get_args().keyword)
+if __name__ == '__main__':
+    main()
