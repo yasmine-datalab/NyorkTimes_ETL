@@ -2,15 +2,16 @@
     Contains [datalake] access and files fetching tools
 """
 
-from distutils.command.clean import clean
+from concurrent.futures import ProcessPoolExecutor
 import re  # for regex
 import os
 import argparse
 import json
-from datetime import date, datetime
+from datetime import datetime
 from dask import bag as bg
 from sentiment_analysis import SentimentModel
 from clean_tools import cleaning
+from connect import insert
 
 
 def get_args():
@@ -72,7 +73,7 @@ def get_files_path(start_date: str, end_date: str):
     return final_paths
 
 
-def read_file(paths: list):
+def extract(paths: list):
     """
         Read file contents. Save it in dask.bag
     Args :
@@ -103,15 +104,13 @@ def transform_articles(article: dict):
 
 
 def main():
-    from concurrent.futures import ProcessPoolExecutor
-
     paths = get_files_path(
             start_date=get_args().start_time,
             end_date=get_args().end_time)
-    articles = read_file(paths)
+    articles = extract(paths)
     with ProcessPoolExecutor() as executor:
         articles_good = list(executor.map(transform_articles, articles))
-    return articles_good
+    insert(articles_good)
 
 
 if __name__ == '__main__':
